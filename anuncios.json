@@ -14,5 +14,11 @@
       "foto": "iphone.png",
       "tags": [ "lifestyle", "mobile"]
     }
+  ],
+  "ususarios":[
+    {
+      "email": "user@example.com",
+      "password": "1234"
+    }
   ]
 }
