@@ -7,6 +7,9 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+const LoginController = require('./routes/apiv1/loginController');
+const jwtAuthMiddleware = require('./lib/jwtAuthMiddleware');
+
 const { isAPI } = require('./lib/utils');
 require('./models'); // Connect DB & register models
 
@@ -31,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const loginController = new LoginController()
+
 /**
  * Website routes
  */
@@ -40,7 +45,8 @@ app.use('/anuncios', require('./routes/anuncios'));
 /**
  * API v1 routes
  */
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
+app.use('/apiv1/anuncios', jwtAuthMiddleware, require('./routes/apiv1/anuncios'));
+app.use('/apiv1/login', loginController.postJWT);
 
 /**
  * Error handlers

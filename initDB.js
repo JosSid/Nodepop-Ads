@@ -1,7 +1,8 @@
 'use strict';
+require('dotenv').config();
 
 const { askUser } = require('./lib/utils');
-const { mongoose, connectMongoose, Anuncio } = require('./models');
+const { mongoose, connectMongoose, Anuncio, Usuario } = require('./models');
 
 const ANUNCIOS_JSON = './anuncios.json';
 
@@ -24,6 +25,13 @@ async function main() {
   const anunciosResult = await initAnuncios(ANUNCIOS_JSON);
   console.log(`\nAnuncios: Deleted ${anunciosResult.deletedCount}, loaded ${anunciosResult.loadedCount} from ${ANUNCIOS_JSON}`);
 
+  const usuariosResult = await initUsuarios(ANUNCIOS_JSON);
+  for(let usuario of usuariosResult) {
+    console.log(`\nCreado usuario con email ${usuario.email} y password ${usuario.password}`)
+  }
+  
+  
+
   // Cuando termino, cierro la conexión a la BD
   await mongoose.connection.close();
   console.log('\nDone.');
@@ -33,4 +41,12 @@ async function initAnuncios(fichero) {
   const { deletedCount } = await Anuncio.deleteMany();
   const loadedCount = await Anuncio.cargaJson(fichero);
   return { deletedCount, loadedCount };
+}
+
+async function initUsuarios(fichero) {
+
+  await Usuario.deleteMany();
+  const usuarios = await Usuario.cargaJson(fichero);
+  
+  return usuarios;
 }
