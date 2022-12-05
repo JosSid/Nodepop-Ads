@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 
 const LoginController = require('./routes/apiv1/loginController');
 const jwtAuthMiddleware = require('./lib/jwtAuthMiddleware');
+const i18n = require('./lib/i18nConfigure');
 
 const { isAPI } = require('./lib/utils');
 require('./models'); // Connect DB & register models
@@ -34,7 +35,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const loginController = new LoginController()
+const loginController = new LoginController();
+
+app.use(i18n.init);
 
 /**
  * Website routes
