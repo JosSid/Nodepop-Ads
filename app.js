@@ -18,7 +18,8 @@ const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+app.engine('html', require('ejs').__express)
 
 /**
  * Global Template variables
@@ -44,6 +45,7 @@ app.use(i18n.init);
  */
 app.use('/', require('./routes/index'));
 app.use('/anuncios', require('./routes/anuncios'));
+app.use('/change-locale', require('./routes/change-locale'));
 
 /**
  * API v1 routes
